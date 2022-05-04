@@ -1,4 +1,4 @@
-submitter slurm :: COMMANDS TASK_VARIABLES CONFIGURATION {
+submitter shell :: COMMANDS TASK_VARIABLES CONFIGURATION {
     action run > exit_code {
         # define script (random suffix for parallel acess)
         suffix=$((1 + $RANDOM % 1024))
