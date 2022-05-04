@@ -1,0 +1,21 @@
+# * "checkout" is run in a sandbox directory
+# * All other commands are run inside $dir
+versioner git :: repo ref {
+  action checkout > dir {
+    git clone --progress $repo $dir
+  }
+  # This is perhaps more accurately called the "expected" version
+  action repo_version > version {
+    if [[ "$ref" == "HEAD" ]]; then
+      git ls-remote $repo $ref | cut -f1 > $version
+    else
+      echo "$ref" > $version
+    fi
+  }
+  # TODO: Can we do without this? Just check repo version as we checkout? (potential race condition)
+  # Used to confirm version after checkout
+  action local_version > version date {
+    git rev-parse HEAD > $version
+    git log -1 | awk '/^Date/{$1=""; print}' > $date
+  }
+}
