@@ -12,7 +12,7 @@ submitter shell :: COMMANDS TASK_VARIABLES CONFIGURATION {
 
         # print actual jobs 
         echo "$COMMANDS" >> $wrapper
-        srun --mem=$mem --gres=gpu:$gpus -c $cpus --job-name=$TASK --time=0 bash $wrapper
+        #bash --mem=$mem --gres=gpu:$gpus -c $cpus --job-name=$TASK --time=0 bash $wrapper
         rm -f $wrapper
   }
 }
