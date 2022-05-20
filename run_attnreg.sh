@@ -1,7 +1,8 @@
 #! /bin/bash
 
-PATH_TO_DATA=./data/os18_preprocessed/projects/tir1/corpora/dialogue_mt/aligned-os18-enfr
-REPO=./contextual_mt
+
+PATH_TO_DATA=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/data/os18_preprocessed/projects/tir1/corpora/dialogue_mt/prep/
+REPO=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/contextual_mt/
 TASK=attention_regularization
 SRC_CONTEXT_SIZE=5
 TGT_CONTEXT_SIZE=5
@@ -10,6 +11,8 @@ TGT_CONTEXT_SIZE=5
 fairseq-train $PATH_TO_DATA \
     --user-dir $REPO \
     --task $TASK \
+    --source-lang en \
+    --target-lang fr \
     --source-context-size $SRC_CONTEXT_SIZE --target-context-size $TGT_CONTEXT_SIZE \
     --sample-context-size \
     --coword-dropout 0.1 \
@@ -24,4 +27,4 @@ fairseq-train $PATH_TO_DATA \
     --eval-bleu-remove-bpe sentencepiece \
     --eval-bleu-print-samples \
     --best-checkpoint-metric bleu --maximize-best-checkpoint-metric \
-    --save-dir ./checkpoints --no-epoch-checkpoints
+    --save-dir ./checkpoints --no-epoch-checkpoints 

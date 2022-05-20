@@ -1,7 +1,8 @@
 #! /bin/bash
 
-PATH_TO_DATA=./data/os18_preprocessed/projects/tir1/corpora/dialogue_mt/aligned-os18-enfr
-REPO=./contextual_mt
+#adjust this path
+PATH_TO_DATA=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/data/os18_preprocessed/projects/tir1/corpora/dialogue_mt/prep/
+REPO=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/contextual_mt/
 TASK=document_translation
 SRC_CONTEXT_SIZE=5
 TGT_CONTEXT_SIZE=5
@@ -24,4 +25,4 @@ fairseq-train $PATH_TO_DATA \
     --eval-bleu-remove-bpe sentencepiece \
     --eval-bleu-print-samples \
     --best-checkpoint-metric bleu --maximize-best-checkpoint-metric \
-    --save-dir ./checkpoints --no-epoch-checkpoints
+    --save-dir ./checkpoints --no-epoch-checkpoints 
