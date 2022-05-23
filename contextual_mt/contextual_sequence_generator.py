@@ -13,12 +13,14 @@ from torch import Tensor
 
 
 class ContextualSequenceGenerator(SequenceGenerator):
-    def __init__(self, models, *args, **kwargs):
+    def __init__(self, models,*args, **kwargs):
         if isinstance(models, EnsembleModel):
             models = ContextualEnsembleModel(models.models)
         else:
             models = ContextualEnsembleModel(models)
         super().__init__(models, *args, **kwargs)
+        self.no_repeat_ngram_size=0
+
 
     def _generate(
         self,

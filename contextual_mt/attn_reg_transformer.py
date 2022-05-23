@@ -187,7 +187,7 @@ class TransformerEncoderLayerReturnSelfAttention(TransformerEncoderLayer):
 
     def forward(self, x, encoder_padding_mask, attn_mask: Optional[Tensor] = None):
         """
-        Args:
+        args:
             x (Tensor): input to the layer of shape `(seq_len, batch, embed_dim)`
             encoder_padding_mask (ByteTensor): binary ByteTensor of shape
                 `(batch, seq_len)` where padding elements are indicated by ``1``.
@@ -265,7 +265,7 @@ class AttnRegTransformerDecoder(TransformerDecoder):
         return_all_hiddens: bool = False,
     ):
         """
-        Args:
+        args:
             prev_output_tokens (LongTensor): previous decoder outputs of shape
                 `(batch, tgt_len)`, for teacher forcing
             encoder_out (optional): output from the encoder, used for
@@ -342,7 +342,7 @@ class AttnRegTransformerDecoder(TransformerDecoder):
         Similar to *forward* but only return features.
         Includes several features from "Jointly Learning to Align and
         Translate with Transformer Models" (Garg et al., EMNLP 2019).
-        Args:
+        args:
             full_context_alignment (bool, optional): don't apply
                 auto-regressive mask to self-attention (default: False).
             alignment_layer (int, optional): return mean alignment over
@@ -499,7 +499,7 @@ class TransformerDecoderLayerReturnSelfAttention(TransformerDecoderLayer):
         need_head_weights: bool = False,
     ):
         """
-        Args:
+        args:
             x (Tensor): input to the layer of shape `(seq_len, batch, embed_dim)`
             encoder_padding_mask (ByteTensor, optional): binary
                 ByteTensor of shape `(batch, src_len)` where padding
