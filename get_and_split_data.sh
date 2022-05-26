@@ -8,7 +8,7 @@ cd ./data/os18_preprocessed
 
 #tar -xvf os18-enfr.tar
 
-cd ./projects/tir1/corpora/dialogue_mt/aligned-os18-enfr
+cd ./projects\ 2/tir1/corpora/dialogue_mt/aligned-os18-enfr
 
 # split english data
 head -n 16079288  OpenSubtitles.en-fr.aligned.en > train.en
@@ -19,5 +19,10 @@ tail -n 10036 OpenSubtitles.en-fr.aligned.en > test.en
 head -n 16079288  OpenSubtitles.en-fr.aligned.fr > train.fr
 sed -n '16079289,16089324p' OpenSubtitles.en-fr.aligned.fr > valid.fr
 tail -n 10036 OpenSubtitles.en-fr.aligned.fr > test.fr
+
+# split ids 
+head -n 16079288  OpenSubtitles.en-fr.aligned.ids > train.ids
+sed -n '16079289,16089324p' OpenSubtitles.en-fr.aligned.ids > valid.ids
+tail -n 10036 OpenSubtitles.en-fr.aligned.ids > test.ids
 
 cd ../../
