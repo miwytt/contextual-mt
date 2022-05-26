@@ -111,8 +111,8 @@ class AttentionRegularizationTask(DocumentTranslationTask):
         tgt_dataset = data_utils.load_indexed_dataset(
             prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
         )
-        #with open(prefix+"docids", "r", encoding="utf-8") as f:
-         #   doc_ids = [idx for idx in f]  # allow string
+        with open(prefix[:-6]+"ids", "r", encoding="utf-8") as f: # changed this to match name of desired docids
+            doc_ids = [idx for idx in f]  # allow string
 
         pos_tags = None
         if split == "train" and os.path.exists(f"{prefix}pos.{src}"):
@@ -124,7 +124,6 @@ class AttentionRegularizationTask(DocumentTranslationTask):
                 p.split(":")[0]: float(p.split(":")[1])
                 for p in self.cfg.pos_drop_probs
             }
-# removed  doc_ids, between self.tgt_dict and self.cfg.source_context_size
         main_data = ContextualDataset(
             src_dataset,
             src_dataset.sizes,
@@ -132,6 +131,7 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             tgt_dataset,
             tgt_dataset.sizes,
             self.tgt_dict,
+            doc_ids,
             self.cfg.source_context_size,
             self.cfg.target_context_size,
             src_pos_tags=pos_tags,

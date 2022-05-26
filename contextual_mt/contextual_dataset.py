@@ -127,7 +127,7 @@ class ContextualDataset(FairseqDataset):
         shuffle (bool, optional): shuffle dataset elements before batching
             (default: True).
     """
-# removed  contextual_ids, between tgt_dict and src_ctx_size
+
     def __init__(
         self,
         src,
@@ -136,6 +136,7 @@ class ContextualDataset(FairseqDataset):
         tgt,
         tgt_sizes,
         tgt_dict,
+        contextual_ids,
         src_ctx_size=0,
         tgt_ctx_size=0,
         pos_drop_probs=None,
@@ -158,7 +159,7 @@ class ContextualDataset(FairseqDataset):
         self.tgt_dict = tgt_dict
         self.src_ctx_size = src_ctx_size
         self.tgt_ctx_size = tgt_ctx_size
-#        self.contextual_ids = np.array(contextual_ids)
+        self.contextual_ids = np.array(contextual_ids)
         self.break_tag = break_tag
         self.sample_context_size = sample_context_size
         self.shuffle = shuffle
@@ -167,15 +168,15 @@ class ContextualDataset(FairseqDataset):
         full_src_sizes, full_tgt_sizes = [], []
         for i, size in enumerate(src_sizes):
             for j in range(1, self.src_ctx_size + 1):
-                # if self.contextual_ids[i - j] != self.contextual_ids[i]:
-                    #break
+                if self.contextual_ids[i - j] != self.contextual_ids[i]:
+                    break
                 size += src_sizes[i - j] + 1
             full_src_sizes.append(size + 1)
         # FIXME: if target context is part of input, this needs to be rethinked
         for i, size in enumerate(tgt_sizes):
             for j in range(1, self.tgt_ctx_size + 1):
-                # if self.contextual_ids[i - j] != self.contextual_ids[i]:
-                    #break
+                if self.contextual_ids[i - j] != self.contextual_ids[i]:
+                    break
                 size += tgt_sizes[i - j] + 1
             full_tgt_sizes.append(size + 1)
 
@@ -207,8 +208,8 @@ class ContextualDataset(FairseqDataset):
 
             for i in range(1, src_context_size + 1):
                 # break if previous sample is from a different context (doc/chat)
-                # if self.contextual_ids[index - i] != self.contextual_ids[index]:
-                 #   break
+                if self.contextual_ids[index - i] != self.contextual_ids[index]:
+                    break
                 # add break tag if passed
                 if len(src_ctx_item) > 0 and self.break_tag is not None:
                     src_ctx_item = torch.cat([src_break_id, src_ctx_item])
@@ -222,12 +223,12 @@ class ContextualDataset(FairseqDataset):
                 tgt_context_size = self.tgt_ctx_size
 
             for i in range(1, tgt_context_size + 1):
-                # if self.contextual_ids[index - i] != self.contextual_ids[index]:
-                  #  break
-                if len(tgt_ctx_item) > 0 and self.break_tag is not None:
+                 if self.contextual_ids[index - i] != self.contextual_ids[index]:
+                    break
+                 if len(tgt_ctx_item) > 0 and self.break_tag is not None:
                     tgt_ctx_item = torch.cat([tgt_break_id, tgt_ctx_item])
 
-                tgt_ctx_item = torch.cat([self.tgt[index - i][:-1], tgt_ctx_item])
+                 tgt_ctx_item = torch.cat([self.tgt[index - i][:-1], tgt_ctx_item])
 
         src_eos_id = torch.Tensor([self.src_dict.eos()]).long()
         tgt_eos_id = torch.Tensor([self.tgt_dict.eos()]).long()
