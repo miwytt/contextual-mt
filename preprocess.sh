@@ -4,9 +4,9 @@ VOCAB_SIZE=100
 #DATA_DIR=./data/os18_preprocessed/projects/tir1/corpora/
 #dialogue_mt/aligned-os18-enfr
 
-DATA_DIR=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/data/os18_preprocessed/projects/tir1/corpora/dialogue_mt
+DATA_DIR=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/data/os18_preprocessed/projects2/tir1/corpora/dialogue_mt/aligned-os18-enfr
 
-mkdir /Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/data/os18_preprocessed/projects/tir1/corpora/dialogue_mt/prep
+mkdir /Users/michelle/Desktop/cl/reproducibility_in_nlp/project/try/contextual-mt/data/os18_preprocessed/projects2/tir1/corpora/dialogue_mt/aligned-os18-enfr/prep
 
 for lang in en fr; do
     python ./scripts/spm_train.py \
