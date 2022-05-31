@@ -75,7 +75,7 @@ class AttentionRegularizationTask(DocumentTranslationTask):
 
     def load_dataset(self, split, epoch=1, combine=False, shuffle=True, **kwargs):
         """Load a given dataset split.
-        Args:
+        args:
             split (str): name of the split (e.g., train, valid, test)
         """
 
@@ -83,17 +83,18 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             filename = os.path.join(
                 data_path, "{}.{}-{}.{}".format(split, src, tgt, lang)
             )
-            return indexed_dataset.dataset_exists(filename, impl=self.args.dataset_impl)
+            return indexed_dataset.dataset_exists(filename, impl=self.cfg.dataset_impl)
 
-        paths = utils.split_paths(self.args.data)
+        paths = utils.split_paths(self.cfg.data)
         assert len(paths) > 0
-        if split != getattr(self.args, "train_subset", None):
+        if split != getattr(self.cfg, "train_subset", None):
             # if not training data set, use the first shard for valid and test
             paths = paths[:1]
         data_path = paths[(epoch - 1) % len(paths)]
 
         # infer langcode
-        src, tgt = self.args.source_lang, self.args.target_lang
+        #src, tgt = self.cfg.source_lang, self.cfg.target_lang
+        src, tgt = "en", "fr"
 
         if split_exists(split, src, tgt, src, data_path):
             prefix = os.path.join(data_path, "{}.{}-{}.".format(split, src, tgt))
@@ -105,12 +106,12 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             )
 
         src_dataset = data_utils.load_indexed_dataset(
-            prefix + src, self.src_dict, self.args.dataset_impl
+            prefix + src, self.src_dict, self.cfg.dataset_impl
         )
         tgt_dataset = data_utils.load_indexed_dataset(
-            prefix + tgt, self.tgt_dict, self.args.dataset_impl
+            prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
         )
-        with open(prefix + "docids", "r", encoding="utf-8") as f:
+        with open(prefix[:-6]+"ids", "r", encoding="utf-8") as f: # changed this to match name of desired docids
             doc_ids = [idx for idx in f]  # allow string
 
         pos_tags = None
@@ -118,12 +119,11 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             with open(f"{prefix}pos.{src}", "r", encoding="utf-8") as f:
                 pos_tags = [line.strip().split(" ") for line in f]
         pos_drop_probs = None
-        if self.args.pos_drop_probs is not None:
+        if self.cfg.pos_drop_probs is not None:
             pos_drop_probs = {
                 p.split(":")[0]: float(p.split(":")[1])
-                for p in self.args.pos_drop_probs
+                for p in self.cfg.pos_drop_probs
             }
-
         main_data = ContextualDataset(
             src_dataset,
             src_dataset.sizes,
@@ -132,15 +132,15 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             tgt_dataset.sizes,
             self.tgt_dict,
             doc_ids,
-            self.args.source_context_size,
-            self.args.target_context_size,
+            self.cfg.source_context_size,
+            self.cfg.target_context_size,
             src_pos_tags=pos_tags,
             pos_drop_probs=pos_drop_probs,
-            break_tag=self.args.break_tag,
+            break_tag=self.cfg.break_tag,
             shuffle=shuffle,
         )
 
-        if (self.args.regularize_heads is not None) and (split == "train"):
+        if (self.cfg.regularize_heads is not None) and (split == "train"):
             # Load highlighted data
             split_path = f"highlighted.{split}"
             if split_exists(split_path, src, tgt, src, data_path):
@@ -157,11 +157,11 @@ class AttentionRegularizationTask(DocumentTranslationTask):
                 )
 
             h_src_dataset = data_utils.load_indexed_dataset(
-                prefix + src, self.src_dict, self.args.dataset_impl
+                prefix + src, self.src_dict, self.cfg.dataset_impl
             )
 
             h_tgt_dataset = data_utils.load_indexed_dataset(
-                prefix + tgt, self.tgt_dict, self.args.dataset_impl
+                prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
             )
 
             split_path = f"highlighted.{split}.context"
@@ -179,10 +179,10 @@ class AttentionRegularizationTask(DocumentTranslationTask):
                     "Dataset not found: {} ({})".format(split_path, data_path)
                 )
             h_src_ctx_dataset = data_utils.load_indexed_dataset(
-                prefix + src, self.src_dict, self.args.dataset_impl
+                prefix + src, self.src_dict, self.cfg.dataset_impl
             )
             h_tgt_ctx_dataset = data_utils.load_indexed_dataset(
-                prefix + tgt, self.tgt_dict, self.args.dataset_impl
+                prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
             )
 
             contra = True if split == "test" else False
@@ -198,16 +198,16 @@ class AttentionRegularizationTask(DocumentTranslationTask):
                 h_src_ctx_dataset.sizes,
                 h_tgt_ctx_dataset,
                 h_tgt_ctx_dataset.sizes,
-                break_tag=self.args.break_tag,
-                hon_tag=self.args.highlight_on_tag,
-                hoff_tag=self.args.highlight_off_tag,
-                p_tag=self.args.src_word_on_tag,
-                p2_tag=self.args.src_word_off_tag,
+                break_tag=self.cfg.break_tag,
+                hon_tag=self.cfg.highlight_on_tag,
+                hoff_tag=self.cfg.highlight_off_tag,
+                p_tag=self.cfg.src_word_on_tag,
+                p2_tag=self.cfg.src_word_off_tag,
                 shuffle=shuffle,
                 contrastive=contra,
             )
 
-            def sampler(x, p=self.args.highlight_sample):
+            def sampler(x, p=self.cfg.highlight_sample):
                 if random.random() > p:
                     return x[1]
                 else:
@@ -223,7 +223,7 @@ class AttentionRegularizationTask(DocumentTranslationTask):
 
     def load_highlighted(self, epoch=1, combine=False, **kwargs):
         """Load a given dataset split.
-        Args:
+        args:
             split (str): name of the split (e.g., train, valid, test)
         """
 
@@ -231,15 +231,15 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             filename = os.path.join(
                 data_path, "{}.{}-{}.{}".format(split, src, tgt, lang)
             )
-            return indexed_dataset.dataset_exists(filename, impl=self.args.dataset_impl)
+            return indexed_dataset.dataset_exists(filename, impl=self.cfg.dataset_impl)
 
-        paths = utils.split_paths(self.args.data)
+        paths = utils.split_paths(self.cfg.data)
         assert len(paths) > 0
         paths = paths[:1]
         data_path = paths[(epoch - 1) % len(paths)]
 
         # infer langcode
-        src, tgt = self.args.source_lang, self.args.target_lang
+        src, tgt = self.cfg.source_lang, self.cfg.target_lang
 
         # Load highlighted data
         if split_exists("highlighted", src, tgt, src, data_path):
@@ -256,10 +256,10 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             )
 
         h_src_dataset = data_utils.load_indexed_dataset(
-            prefix + src, self.src_dict, self.args.dataset_impl
+            prefix + src, self.src_dict, self.cfg.dataset_impl
         )
         h_tgt_dataset = data_utils.load_indexed_dataset(
-            prefix + tgt, self.tgt_dict, self.args.dataset_impl
+            prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
         )
 
         if split_exists("highlighted.context", src, tgt, src, data_path):
@@ -275,10 +275,10 @@ class AttentionRegularizationTask(DocumentTranslationTask):
                 "Dataset not found: {} ({})".format("highlighted.context", data_path)
             )
         h_src_ctx_dataset = data_utils.load_indexed_dataset(
-            prefix + src, self.src_dict, self.args.dataset_impl
+            prefix + src, self.src_dict, self.cfg.dataset_impl
         )
         h_tgt_ctx_dataset = data_utils.load_indexed_dataset(
-            prefix + tgt, self.tgt_dict, self.args.dataset_impl
+            prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
         )
 
         self.datasets["highlighted"] = HighlightedDataset(
@@ -292,10 +292,10 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             h_src_ctx_dataset.sizes,
             h_tgt_ctx_dataset,
             h_tgt_ctx_dataset.sizes,
-            break_tag=self.args.break_tag,
-            hon_tag=self.args.highlight_on_tag,
-            hoff_tag=self.args.highlight_off_tag,
-            p_tag=self.args.src_word_on_tag,
-            p2_tag=self.args.src_word_off_tag,
+            break_tag=self.cfg.break_tag,
+            hon_tag=self.cfg.highlight_on_tag,
+            hoff_tag=self.cfg.highlight_off_tag,
+            p_tag=self.cfg.src_word_on_tag,
+            p2_tag=self.cfg.src_word_off_tag,
             shuffle=True,
         )
