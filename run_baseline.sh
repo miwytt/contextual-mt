@@ -4,7 +4,7 @@
 PATH_TO_DATA=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/projects/tir1/corpora/dialogue_mt/aligned-os18-enfr/bin/
 # path to repo has to be at the right level otherwise fairseq tasks won't be recognized
 REPO=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/contextual_mt/
-TASK=attention_regularization
+TASK=document_translation
 SRC_CONTEXT_SIZE=5
 TGT_CONTEXT_SIZE=5
 
