@@ -106,8 +106,8 @@ class DocumentTranslationTask(TranslationTask):
             prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
         )
         with open(prefix[:-6] + "ids", "r") as f: # changed this to match name of desired docids
-            doc_ids = [int(idx) for idx in f]
-
+            
+            doc_ids = [idx for idx in f]
         # checks for POS tags for every token in the training set
         # so we can have specific probabilites per POS
         # NOTE: not used during the paper
