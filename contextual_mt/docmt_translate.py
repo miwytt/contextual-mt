@@ -100,7 +100,7 @@ def main():
     src_dict = pretrained["task"].src_dict
     tgt_dict = pretrained["task"].tgt_dict
     source_context_size = (
-        pretrained["task"].args.source_context_size
+        pretrained["task"].cfg.source_context_size
         if args.source_context_size is None
         else args.source_context_size
     )
