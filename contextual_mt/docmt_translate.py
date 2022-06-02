@@ -105,7 +105,7 @@ def main():
         else args.source_context_size
     )
     target_context_size = (
-        pretrained["task"].args.target_context_size
+        pretrained["task"].cfg.target_context_size
         if args.target_context_size is None
         else args.target_context_size
     )
@@ -130,7 +130,7 @@ def main():
     with open(args.source_file, "r", encoding="utf-8") as src_f:
         srcs = [line.strip() for line in src_f]
     with open(args.docids_file, "r", encoding="utf-8") as docids_f:
-        docids = [int(idx) for idx in docids_f]
+        docids = [idx for idx in docids_f]
     if args.reference_file is not None:
         with open(args.reference_file, "r", encoding="utf-8") as tgt_f:
             refs = [line.strip() for line in tgt_f]
