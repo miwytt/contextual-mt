@@ -15,7 +15,9 @@ PREDICTION_DIR=./predictions_baseline_nongold
 #PREDICTION_DIR=./predicitons_attnreg_gold
 PREDICTION_DIR=./predictions_attnreg_nongold
 
-python contextual_mt/docmt_translate.py \
+cp $DATA_DIR/dict.*txt $CHECKPOINT_DIR
+
+python ./contextual_mt/docmt_translate.py \
     --path $CHECKPOINT_DIR \
     --source-lang en --target-lang fr \
     --source-file $DATA_DIR/test.en \
