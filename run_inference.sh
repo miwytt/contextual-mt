@@ -10,10 +10,14 @@ CHECKPOINT_DIR=./checkpoints_baseline
 #CHECKPOINT_DIR=./checkpoints_attnreg
 
 # do gold if time
+# mkdir predictions_baseline_gold
 #PREDICTION_DIR=./predictions_baseline_gold
+mkdir predictions_baseline_gold
 PREDICTION_DIR=./predictions_baseline_nongold
+#mkdir predictions_attnreg_gold
 #PREDICTION_DIR=./predicitons_attnreg_gold
-PREDICTION_DIR=./predictions_attnreg_nongold
+#mkdir predictions_attnreg_nongold
+#PREDICTION_DIR=./predictions_attnreg_nongold
 
 cp $DATA_DIR/dict.*txt $CHECKPOINT_DIR
 
@@ -22,7 +26,7 @@ python ./contextual_mt/docmt_translate.py \
     --source-lang en --target-lang fr \
     --source-file $DATA_DIR/test.en \
     --predictions-file $PREDICTION_DIR/test.pred.en \
-    --docids-file $DATA_DIR/test.docids \
+    --docids-file $DATA_DIR/test.ids \
     --beam 5
 #do gold if time    
 #--gold-target-context
