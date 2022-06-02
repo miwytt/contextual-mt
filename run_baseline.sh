@@ -1,9 +1,9 @@
 #! /bin/bash
 
 # adjust this path to lead to split and binarized data as well as docids
-PATH_TO_DATA=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/projects/tir1/corpora/dialogue_mt/aligned-os18-enfr/bin/
+PATH_TO_DATA=./data/os18/bin/
 # path to repo has to be at the right level otherwise fairseq tasks won't be recognized
-REPO=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/contextual_mt/
+REPO=./contextual_mt/
 TASK=document_translation
 SRC_CONTEXT_SIZE=5
 TGT_CONTEXT_SIZE=5
@@ -26,4 +26,4 @@ fairseq-train $PATH_TO_DATA \
     --eval-bleu-remove-bpe sentencepiece \
     --eval-bleu-print-samples \
     --best-checkpoint-metric bleu --maximize-best-checkpoint-metric \
-    --save-dir ./checkpoints --no-epoch-checkpoints 
+    --save-dir ./checkpoints_baseline --no-epoch-checkpoints 
