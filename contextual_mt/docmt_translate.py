@@ -15,6 +15,7 @@ from contextual_mt import ContextualSequenceGenerator
 from contextual_mt.utils import encode, decode, create_context, parse_documents
 
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-file", required=True, help="file to be translated")
