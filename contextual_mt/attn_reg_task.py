@@ -64,7 +64,7 @@ class AttentionRegularizationTask(DocumentTranslationTask):
         )
         parser.add_argument(
             "--kl-lambda",
-            default=1,
+            default=10,
             type=float,
             help="lambda weight term for attention KL div loss",
         )
