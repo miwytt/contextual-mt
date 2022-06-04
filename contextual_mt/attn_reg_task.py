@@ -64,7 +64,7 @@ class AttentionRegularizationTask(DocumentTranslationTask):
         )
         parser.add_argument(
             "--kl-lambda",
-            default=10,
+            default=1,
             type=float,
             help="lambda weight term for attention KL div loss",
         )
@@ -93,8 +93,8 @@ class AttentionRegularizationTask(DocumentTranslationTask):
         data_path = paths[(epoch - 1) % len(paths)]
 
         # infer langcode
-        #src, tgt = self.cfg.source_lang, self.cfg.target_lang
-        src, tgt = "en", "fr"
+        src, tgt = self.cfg.source_lang, self.cfg.target_lang
+        #src, tgt = "en", "fr"
 
         if split_exists(split, src, tgt, src, data_path):
             prefix = os.path.join(data_path, "{}.{}-{}.".format(split, src, tgt))
@@ -141,19 +141,21 @@ class AttentionRegularizationTask(DocumentTranslationTask):
         )
 
         if (self.cfg.regularize_heads is not None) and (split == "train"):
+            highlight_path="./data/scat/bin/"
+           
             # Load highlighted data
             split_path = f"highlighted.{split}"
-            if split_exists(split_path, src, tgt, src, data_path):
+            if split_exists(split_path, src, tgt, src, highlight_path):
                 prefix = os.path.join(
-                    data_path, "{}.{}-{}.".format(split_path, src, tgt)
+                    highlight_path, "{}.{}-{}.".format(split_path, src, tgt)
                 )
-            elif split_exists(split_path, tgt, src, src, data_path):
+            elif split_exists(split_path, tgt, src, src, highlight_path):
                 prefix = os.path.join(
-                    data_path, "{}.{}-{}.".format(split_path, tgt, src)
+                    highlight_path, "{}.{}-{}.".format(split_path, tgt, src)
                 )
             else:
                 raise FileNotFoundError(
-                    "Dataset not found: {} ({})".format(split_path, data_path)
+                    "Dataset not found: {} ({})".format(split_path, highlight_path)
                 )
 
             h_src_dataset = data_utils.load_indexed_dataset(
@@ -165,18 +167,18 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             )
 
             split_path = f"highlighted.{split}.context"
-
-            if split_exists(split_path, src, tgt, src, data_path):
+            highlight_context_path="./data/scat/bin_context/"
+            if split_exists(split_path, src, tgt, src, highlight_context_path):
                 prefix = os.path.join(
-                    data_path, "{}.{}-{}.".format(split_path, src, tgt)
+                    highlight_context_path, "{}.{}-{}.".format(split_path, src, tgt)
                 )
-            elif split_exists("highlighted.context", tgt, src, src, data_path):
+            elif split_exists("highlighted.context", tgt, src, src, highlight_context_path):
                 prefix = os.path.join(
-                    data_path, "{}.{}-{}.".format(split_path, tgt, src)
+                    highlight_context_path, "{}.{}-{}.".format(split_path, tgt, src)
                 )
             else:
                 raise FileNotFoundError(
-                    "Dataset not found: {} ({})".format(split_path, data_path)
+                    "Dataset not found: {} ({})".format(split_path, highlight_context_path)
                 )
             h_src_ctx_dataset = data_utils.load_indexed_dataset(
                 prefix + src, self.src_dict, self.cfg.dataset_impl
