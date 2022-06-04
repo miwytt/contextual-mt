@@ -65,13 +65,13 @@ class AttentionLoss(FairseqCriterion):
         self.eps = label_smoothing
         self.ignore_prefix_size = ignore_prefix_size
         self.report_accuracy = report_accuracy
-        self.regularize_heads = task.args.regularize_heads
-        self.lamb = task.args.kl_lambda
-        self.reg_attn = task.args.regularize_attention
-        self.enc_alignment_layer = task.args.enc_alignment_layer
-        self.cross_alignment_layer = task.args.cross_alignment_layer
-        self.self_alignment_layer = task.args.self_alignment_layer
-        self.dec_alignment_layer = task.args.dec_alignment_layer
+        self.regularize_heads = task.cfg.regularize_heads
+        self.lamb = task.cfg.kl_lambda
+        self.reg_attn = task.cfg.regularize_attention
+        self.enc_alignment_layer = task.cfg.enc_alignment_layer
+        self.cross_alignment_layer = task.cfg.cross_alignment_layer
+        self.self_alignment_layer = task.cfg.self_alignment_layer
+        self.dec_alignment_layer = task.cfg.dec_alignment_layer
 
     def forward(self, model, sample, reduce=True):
         """Compute the loss for the given sample.
