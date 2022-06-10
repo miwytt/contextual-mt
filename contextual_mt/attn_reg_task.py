@@ -141,21 +141,20 @@ class AttentionRegularizationTask(DocumentTranslationTask):
         )
 
         if (self.cfg.regularize_heads is not None) and (split == "train"):
-            highlight_path="/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/scat/bin/"
-           
+            
             # Load highlighted data
             split_path = f"highlighted.{split}"
-            if split_exists(split_path, src, tgt, src, highlight_path):
+            if split_exists(split_path, src, tgt, src, data_path):
                 prefix = os.path.join(
-                    highlight_path, "{}.{}-{}.".format(split_path, src, tgt)
+                    data_path, "{}.{}-{}.".format(split_path, src, tgt)
                 )
-            elif split_exists(split_path, tgt, src, src, highlight_path):
+            elif split_exists(split_path, tgt, src, src, data_path):
                 prefix = os.path.join(
-                    highlight_path, "{}.{}-{}.".format(split_path, tgt, src)
+                    data_path, "{}.{}-{}.".format(split_path, tgt, src)
                 )
             else:
                 raise FileNotFoundError(
-                    "Dataset not found: {} ({})".format(split_path, highlight_path)
+                    "Dataset not found: {} ({})".format(split_path, data_path)
                 )
 
             h_src_dataset = data_utils.load_indexed_dataset(
@@ -167,18 +166,18 @@ class AttentionRegularizationTask(DocumentTranslationTask):
             )
 
             split_path = f"highlighted.{split}.context"
-            highlight_context_path="/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/scat/bin_context/"
-            if split_exists(split_path, src, tgt, src, highlight_context_path):
+            
+            if split_exists(split_path, src, tgt, src, data_path):
                 prefix = os.path.join(
-                    highlight_context_path, "{}.{}-{}.".format(split_path, src, tgt)
+                    data_path, "{}.{}-{}.".format(split_path, src, tgt)
                 )
-            elif split_exists("highlighted.context", tgt, src, src, highlight_context_path):
+            elif split_exists("highlighted.context", tgt, src, src, data_path):
                 prefix = os.path.join(
-                    highlight_context_path, "{}.{}-{}.".format(split_path, tgt, src)
+                    data_path, "{}.{}-{}.".format(split_path, tgt, src)
                 )
             else:
                 raise FileNotFoundError(
-                    "Dataset not found: {} ({})".format(split_path, highlight_context_path)
+                    "Dataset not found: {} ({})".format(split_path, data_path)
                 )
             h_src_ctx_dataset = data_utils.load_indexed_dataset(
                 prefix + src, self.src_dict, self.cfg.dataset_impl
