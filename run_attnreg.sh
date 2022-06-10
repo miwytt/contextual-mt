@@ -1,8 +1,7 @@
 #! /bin/bash
 
 # adjust this path to lead to split and binarized data as well as docids
-#PATH_TO_DATA=./data/os18/bin/
-PATH_TO_DATA=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/projects/tir1/corpora/dialogue_mt/aligned-os18-enfr/bin/
+PATH_TO_DATA=./data/os18/bin/
 
 # path to repo has to be at the right level otherwise fairseq tasks won't be recognized
 REPO=./contextual_mt/
@@ -14,6 +13,7 @@ TGT_CONTEXT_SIZE=5
 fairseq-train $PATH_TO_DATA \
     --user-dir $REPO \
     --task $TASK \
+    --num-workers 0 \
     --source-context-size $SRC_CONTEXT_SIZE --target-context-size $TGT_CONTEXT_SIZE \
     --source-lang en --target-lang fr \
     --log-interval 10 \
