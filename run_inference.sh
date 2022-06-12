@@ -1,18 +1,15 @@
 #! /bin/bash
 
 DATA_DIR=./data/os18/bin_actual
-#if bin does not work use the following:
-#DATA_DIR=./data/os18/prep
 
 #checkpoints for baseline
 CHECKPOINT_DIR=./checkpoints_baseline
 #checkpoints for attnreg
 #CHECKPOINT_DIR=./checkpoints_attnreg
 
-# do gold if time
-# mkdir predictions_baseline_gold
-#PREDICTION_DIR=./predictions_baseline_gold
-mkdir predictions_baseline_gold
+#mkdir predictions_baseline_nongold
+#PREDICTION_DIR=./predictions_baseline_nongold
+#mkdir predictions_baseline_gold
 PREDICTION_DIR=./predictions_baseline_gold
 #mkdir predictions_attnreg_gold
 #PREDICTION_DIR=./predicitons_attnreg_gold
@@ -26,7 +23,7 @@ python ./contextual_mt/docmt_translate.py \
     --source-lang en --target-lang fr \
     --source-file $DATA_DIR/test.en \
     --predictions-file $PREDICTION_DIR/test.pred.fr \
-    --reference-file $DATA_DIR/test.fr \
     --docids-file $DATA_DIR/test.ids \
     --beam 5 \
-    --gold-target-context
+    --gold-target-context \
+    --reference-file $DATA_DIR/test.fr
