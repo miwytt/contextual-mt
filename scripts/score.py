@@ -85,7 +85,7 @@ def main():
         assert args.docids is not None, "docids file needed when context size > 0"
 
         with open(args.docids) as docids_f:
-            docids = [int(line) for line in docids_f.readlines()]
+            docids = [line.split("/")[2] for line in docids_f.readlines()]
 
         if args.n_sentence is None:
             args.n_sentence = args.context_size
