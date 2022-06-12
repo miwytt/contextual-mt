@@ -3,7 +3,7 @@ from collections import Counter
 
 import torch
 import sacrebleu
-from comet.models import download_model
+from comet import download_model
 
 
 def make_n_sentence_corpus(
