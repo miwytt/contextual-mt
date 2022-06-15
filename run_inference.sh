@@ -3,16 +3,16 @@
 DATA_DIR=./data/os18/bin_actual
 
 #checkpoints for baseline
-CHECKPOINT_DIR=./checkpoints_baseline
+#CHECKPOINT_DIR=./checkpoints_baseline
 #checkpoints for attnreg
-#CHECKPOINT_DIR=./checkpoints_attnreg
+CHECKPOINT_DIR=./checkpoints_attnreg
 
 #mkdir predictions_baseline_nongold
 #PREDICTION_DIR=./predictions_baseline_nongold
 #mkdir predictions_baseline_gold
-PREDICTION_DIR=./predictions_baseline_gold
-#mkdir predictions_attnreg_gold
-#PREDICTION_DIR=./predicitons_attnreg_gold
+#PREDICTION_DIR=./predictions_baseline_gold
+mkdir predictions_attnreg_gold
+PREDICTION_DIR=./predictions_attnreg_gold
 #mkdir predictions_attnreg_nongold
 #PREDICTION_DIR=./predictions_attnreg_nongold
 
