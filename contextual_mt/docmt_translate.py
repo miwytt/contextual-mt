@@ -151,6 +151,9 @@ def main():
     current_docs = [None for _ in range(args.batch_size)]
     current_docs_ids = [-1 for _ in range(args.batch_size)]
     current_docs_pos = [0 for _ in range(args.batch_size)]
+    start = torch.cuda.Event(enable_timing=True) # for timing
+    end = torch.cuda.Event(enable_timing=True) # for timing
+    start.record() # start time recording
     while True:
         batch_map = []
         batch_targets = []
@@ -237,14 +240,17 @@ def main():
         bar.update(len(samples))
 
     bar.close()
-
+    
+    end.record()#end time recording
+    
     assert len(preds) == len(ids)
     _, preds = zip(*sorted(zip(ids, preds)))
 
     with open(args.predictions_file, "w", encoding="utf-8") as f:
         for pred in preds:
             print(pred, file=f)
-
+    
+    print(start.elapsed_time(end))
 
 if __name__ == "__main__":
     main()
