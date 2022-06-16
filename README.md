@@ -1,3 +1,47 @@
+# Reproduction
+
+This part is not part of the original README by neulab. For that please refer to everything below "Contextual MT".
+
+This part serves as a loose guideline on how to reproduce a subset of the experiments in the following paper:
+
+[Do Context-Aware Translation Models Pay the Right Attention?](https://arxiv.org/abs/2105.06977)
+
+More specifically, to pre-process SCAT (Yin et al., 2021) and OpenSubtitles2018 (en-fr) (Lison et al., 2018) datasets, train a context-aware machine translation model, train an attention regularized context-aware machine translation model on said datasets, run inference and evaluate both with BLEU and COMET.
+
+The reproduction was done in a Python==3.8 environment.
+
+After activation of the virtual environment, forking, cloning and installation of the project, the shell script can be run in the following order:
+
+1. install_packages.sh
+2. get_and_split_data.sh
+3. preprocess.sh
+4. run_baseline.sh
+5. scat_preprocess.sh
+6. run_attnreg.sh
+7. run_inference.sh (once for baseline with adapted path)
+8. run_inference.sh (once for attn_reg with adapted path)
+9. install [COMET](https://github.com/Unbabel/COMET)
+10. run_evaluation (once for baseline with adapted path)
+11. run_evaluation (once for attn_reg with adapted path)
+
+
+For this to work a clean subset of OpenSubtitles2018 (Lison et al., 2018) data, which is currently not available publicly, has to be placed at .data/os18/.
+Furthermore, pathnames might have to be adapted according to setup and filenames resulting from 5. scat_preprocess.sh have to be adapted and moved to .data/os18/bin/ to continue.
+
+## References
+
+Pierre Lison, Jörg Tiedemann, and Milen Kouylekov. 2018. OpenSubtitles2018: Statistical rescoring of sentence
+alignments in large, noisy parallel corpora. In Proceedings of the Eleventh International Conference on Language
+Resources and Evaluation (LREC 2018), Miyazaki, Japan. European Language Resources Association (ELRA).
+
+Kayo Yin, Patrick Fernandes, Danish Pruthi, Aditi Chaudhary, André F. T. Martins, and Graham Neubig. 2021b. Do
+Context-Aware Translation Models Pay the Right Attention? In Joint Conference of the 59th Annual Meeting of
+the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language
+Processing (ACL-IJCNLP).
+
+
+
+
 # Contextual  MT
 
 Implementations of context-aware models for document-level translation tasks, used in 

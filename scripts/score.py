@@ -3,7 +3,7 @@ from collections import Counter
 
 import torch
 import sacrebleu
-from comet.models import download_model
+from comet import download_model, load_from_checkpoint
 
 
 def make_n_sentence_corpus(
@@ -85,7 +85,7 @@ def main():
         assert args.docids is not None, "docids file needed when context size > 0"
 
         with open(args.docids) as docids_f:
-            docids = [int(line) for line in docids_f.readlines()]
+            docids = [line.split("/")[2] for line in docids_f.readlines()]
 
         if args.n_sentence is None:
             args.n_sentence = args.context_size
@@ -106,16 +106,22 @@ def main():
             srcs = [line.strip() for line in src_f.readlines()]
 
         # download comet and load
-        comet_model = download_model(args.comet_model, args.comet_path)
+        comet_model_path = download_model(args.comet_model)
+        comet_model = load_from_checkpoint(comet_model_path)
+        
         print("running comet evaluation....")
         comet_input = [
             {"src": src, "mt": mt, "ref": ref} for src, mt, ref in zip(srcs, hyps, refs)
         ]
-        _, comet_scores = comet_model.predict(
-            comet_input, cuda=torch.cuda.is_available(), show_progress=True
-        )
-        print(f"COMET = {sum(comet_scores)/len(comet_scores):.4f}")
-
+        _, comet_scores = comet_model.predict(comet_input, batch_size=8, gpus=1)
+        comet_score = []
+        #for input in comet_input:
+            #    _, comet_score = comet_model.predict(
+        #        input, batch_size=8, gpus=1
+       # )
+        #    comet_scores.append(comet_score)
+       # print(f"COMET = {sum(comet_scores)/len(comet_scores):.4f}")
+        print(comet_scores)
 
 if __name__ == "__main__":
     main()

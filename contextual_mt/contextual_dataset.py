@@ -223,12 +223,12 @@ class ContextualDataset(FairseqDataset):
                 tgt_context_size = self.tgt_ctx_size
 
             for i in range(1, tgt_context_size + 1):
-                if self.contextual_ids[index - i] != self.contextual_ids[index]:
+                 if self.contextual_ids[index - i] != self.contextual_ids[index]:
                     break
-                if len(tgt_ctx_item) > 0 and self.break_tag is not None:
+                 if len(tgt_ctx_item) > 0 and self.break_tag is not None:
                     tgt_ctx_item = torch.cat([tgt_break_id, tgt_ctx_item])
 
-                tgt_ctx_item = torch.cat([self.tgt[index - i][:-1], tgt_ctx_item])
+                 tgt_ctx_item = torch.cat([self.tgt[index - i][:-1], tgt_ctx_item])
 
         src_eos_id = torch.Tensor([self.src_dict.eos()]).long()
         tgt_eos_id = torch.Tensor([self.tgt_dict.eos()]).long()

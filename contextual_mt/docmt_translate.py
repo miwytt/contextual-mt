@@ -15,6 +15,7 @@ from contextual_mt import ContextualSequenceGenerator
 from contextual_mt.utils import encode, decode, create_context, parse_documents
 
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-file", required=True, help="file to be translated")
@@ -99,12 +100,12 @@ def main():
     src_dict = pretrained["task"].src_dict
     tgt_dict = pretrained["task"].tgt_dict
     source_context_size = (
-        pretrained["task"].args.source_context_size
+        pretrained["task"].cfg.source_context_size
         if args.source_context_size is None
         else args.source_context_size
     )
     target_context_size = (
-        pretrained["task"].args.target_context_size
+        pretrained["task"].cfg.target_context_size
         if args.target_context_size is None
         else args.target_context_size
     )
@@ -129,7 +130,7 @@ def main():
     with open(args.source_file, "r", encoding="utf-8") as src_f:
         srcs = [line.strip() for line in src_f]
     with open(args.docids_file, "r", encoding="utf-8") as docids_f:
-        docids = [int(idx) for idx in docids_f]
+        docids = [idx for idx in docids_f]
     if args.reference_file is not None:
         with open(args.reference_file, "r", encoding="utf-8") as tgt_f:
             refs = [line.strip() for line in tgt_f]
@@ -150,6 +151,9 @@ def main():
     current_docs = [None for _ in range(args.batch_size)]
     current_docs_ids = [-1 for _ in range(args.batch_size)]
     current_docs_pos = [0 for _ in range(args.batch_size)]
+    start = torch.cuda.Event(enable_timing=True) # for timing
+    end = torch.cuda.Event(enable_timing=True) # for timing
+    start.record() # start time recording
     while True:
         batch_map = []
         batch_targets = []
@@ -236,14 +240,17 @@ def main():
         bar.update(len(samples))
 
     bar.close()
-
+    
+    end.record()#end time recording
+    
     assert len(preds) == len(ids)
     _, preds = zip(*sorted(zip(ids, preds)))
 
     with open(args.predictions_file, "w", encoding="utf-8") as f:
         for pred in preds:
             print(pred, file=f)
-
+    
+    print(start.elapsed_time(end))
 
 if __name__ == "__main__":
     main()

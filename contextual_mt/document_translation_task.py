@@ -78,17 +78,17 @@ class DocumentTranslationTask(TranslationTask):
             filename = os.path.join(
                 data_path, "{}.{}-{}.{}".format(split, src, tgt, lang)
             )
-            return indexed_dataset.dataset_exists(filename, impl=self.args.dataset_impl)
+            return indexed_dataset.dataset_exists(filename, impl=self.cfg.dataset_impl)
 
-        paths = utils.split_paths(self.args.data)
+        paths = utils.split_paths(self.cfg.data)
         assert len(paths) > 0
-        if split != getattr(self.args, "train_subset", None):
+        if split != getattr(self.cfg, "train_subset", None):
             # if not training data set, use the first shard for valid and test
             paths = paths[:1]
         data_path = paths[(epoch - 1) % len(paths)]
 
         # infer langcode
-        src, tgt = self.args.source_lang, self.args.target_lang
+        src, tgt = self.cfg.source_lang, self.cfg.target_lang
 
         if split_exists(split, src, tgt, src, data_path):
             prefix = os.path.join(data_path, "{}.{}-{}.".format(split, src, tgt))
@@ -100,14 +100,14 @@ class DocumentTranslationTask(TranslationTask):
             )
 
         src_dataset = data_utils.load_indexed_dataset(
-            prefix + src, self.src_dict, self.args.dataset_impl
+            prefix + src, self.src_dict, self.cfg.dataset_impl
         )
         tgt_dataset = data_utils.load_indexed_dataset(
-            prefix + tgt, self.tgt_dict, self.args.dataset_impl
+            prefix + tgt, self.tgt_dict, self.cfg.dataset_impl
         )
-        with open(prefix + "docids", "r") as f:
-            doc_ids = [int(idx) for idx in f]
-
+        with open(prefix[:-6] + "ids", "r") as f: # changed this to match name of desired docids
+            
+            doc_ids = [idx for idx in f]
         # checks for POS tags for every token in the training set
         # so we can have specific probabilites per POS
         # NOTE: not used during the paper
@@ -116,12 +116,11 @@ class DocumentTranslationTask(TranslationTask):
             with open(f"{prefix}pos.{src}", "r") as f:
                 pos_tags = [line.strip().split(" ") for line in f]
         pos_drop_probs = None
-        if self.args.pos_drop_probs is not None:
+        if self.cfg.pos_drop_probs is not None:
             pos_drop_probs = {
                 p.split(":")[0]: float(p.split(":")[1])
-                for p in self.args.pos_drop_probs
+                for p in self.cfg.pos_drop_probs
             }
-
         self.datasets[split] = ContextualDataset(
             src_dataset,
             src_dataset.sizes,
@@ -130,11 +129,11 @@ class DocumentTranslationTask(TranslationTask):
             tgt_dataset.sizes,
             self.tgt_dict,
             doc_ids,
-            self.args.source_context_size,
-            self.args.target_context_size,
+            self.cfg.source_context_size,
+            self.cfg.target_context_size,
             src_pos_tags=pos_tags,
             pos_drop_probs=pos_drop_probs,
-            break_tag=self.args.break_tag,
-            sample_context_size=self.args.sample_context_size,
+            break_tag=self.cfg.break_tag,
+            sample_context_size=self.cfg.sample_context_size,
             shuffle=True,
         )
