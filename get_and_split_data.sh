@@ -10,7 +10,7 @@ cd ./data/
 tar -xvf os18-enfr.tar
 
 # TODO: change paths as needed
-cd ./projects/tir1/corpora/dialogue_mt/aligned-os18-enfr
+cd ./os18/
 
 # split english data
 head -n 16079288  OpenSubtitles.en-fr.aligned.en > train.en
