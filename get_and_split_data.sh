@@ -4,8 +4,7 @@
 # TODO: change paths as needed
 cd ./data/
 
-# has to be downloaded in the browser because of access permission
-# gdown https://drive.google.com/u/0/uc?id=1N983AKGK00WrG8_9bGfgRMhSKN8ABG1c&export=download
+# this is where the clean data should be downloaded
 
 # open tar with clean data
 tar -xvf os18-enfr.tar
