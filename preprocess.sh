@@ -1,14 +1,13 @@
 #! /bin/bash
 
 VOCAB_SIZE=32000
-#DATA_DIR=./data/os18_preprocessed/projects/tir1/corpora/
-#dialogue_mt/aligned-os18-enfr
+
 
 # TODO: change paths as needed
-DATA_DIR=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/projects/tir1/corpora/dialogue_mt/aligned-os18-enfr
+DATA_DIR=./data/os18
 
 # TODO: change paths as needed
-mkdir /Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/projects/tir1/corpora/dialogue_mt/aligned-os18-enfr/prep
+mkdir ./data/os18/prep
 
 for lang in en fr; do
     python ./scripts/spm_train.py \
