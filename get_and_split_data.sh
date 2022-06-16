@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#mkdir ./data/os18_preprocessed
+mkdir ./data/os18
 # TODO: change paths as needed
 cd ./data/
 
