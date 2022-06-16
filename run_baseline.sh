@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # adjust this path to lead to split and binarized data as well as docids
-PATH_TO_DATA=./data/os18/bin_actual/
+PATH_TO_DATA=./data/os18/bin/
 # path to repo has to be at the right level otherwise fairseq tasks won't be recognized
 REPO=./contextual_mt/
 TASK=document_translation
