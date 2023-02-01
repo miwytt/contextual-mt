@@ -1,16 +1,16 @@
 # Reproduction
 
-This part is not part of the original README by neulab. For that please refer to everything below "Contextual MT".
+This part is not part of the original README by neulab. For that, please refer to everything below "Contextual MT".
 
-This part serves as a loose guideline on how to reproduce a subset of the experiments in the following paper:
+This part serves as step-by-step report of a reimplementation attempt of a subset of the experiments described in the following paper:
 
 [Do Context-Aware Translation Models Pay the Right Attention?](https://arxiv.org/abs/2105.06977)
 
-More specifically, to pre-process SCAT (Yin et al., 2021) and OpenSubtitles2018 (en-fr) (Lison et al., 2018) datasets, train a context-aware machine translation model, train an attention regularized context-aware machine translation model on said datasets, run inference and evaluate both with BLEU and COMET.
+The reproduction includes preprocessing the SCAT (Yin et al., 2021) and OpenSubtitles2018 (en-fr) (Lison et al., 2018) datasets, training a context-aware machine translation model, training an attention regularized context-aware machine translation model on said datasets, run inference and evaluate both with the automatic translation evaluation metrics BLEU and COMET. The steps below should facilitate further reproductions of the experiments by Yin et al.
 
 The reproduction was done in a Python==3.8 environment.
 
-After activation of the virtual environment, forking, cloning and installation of the project, the shell script can be run in the following order:
+After activation of the virtual environment, forking, cloning and installation of the project, the shell scripts can be run in the following order:
 
 1. install_packages.sh
 2. get_and_split_data.sh
@@ -25,8 +25,7 @@ After activation of the virtual environment, forking, cloning and installation o
 11. run_evaluation (once for attn_reg with adapted path)
 
 
-For this to work a clean subset of OpenSubtitles2018 (Lison et al., 2018) data, which is currently not available publicly, has to be placed at .data/os18/.
-Furthermore, pathnames might have to be adapted according to setup and filenames resulting from 5. scat_preprocess.sh have to be adapted and moved to .data/os18/bin/ to continue.
+Furthermore, a clean subset of the OpenSubtitles2018 (Lison et al., 2018) data, which is currently not available publicly, has to be placed at .data/os18/. Additionaly, pathnames might have to be adapted according to the setup and filenames resulting from 5. scat_preprocess.sh have to be adapted and moved to .data/os18/bin/ to continue.
 
 ## References
 
