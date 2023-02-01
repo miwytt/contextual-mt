@@ -4,7 +4,7 @@ VOCAB_SIZE=32000
 #DATA_DIR=./data/scat
 
 # TODO: change paths as needed
-DATA_DIR=/Users/michelle/Desktop/cl/reproducibility_in_nlp/project/repro/contextual-mt/data/scat
+DATA_DIR=repro/contextual-mt/data/scat
 
 # TODO: change paths as needed
 mkdir ./data/scat/prep
