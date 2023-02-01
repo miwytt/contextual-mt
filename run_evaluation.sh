@@ -9,7 +9,7 @@ DATA_DIR=./data/os18/bin_actual
 PREDICTION_DIR=./predictions_attnreg_gold
 # eval attnreg with non gold
 #PREDICTION_DIR=./predictions_attnreg_nongold
-COMET_DIR=/home/michelle_wastl/miniconda3/envs/env38/lib/python3.8/site-packages/unbabel_comet-1.0.0rc8.dist-info/
+COMET_DIR=python3.8/site-packages/unbabel_comet-1.0.0rc8.dist-info/
 
 python scripts/score.py $PREDICTION_DIR/test.pred.fr $DATA_DIR/test.fr \
        	--src $DATA_DIR/test.en \
